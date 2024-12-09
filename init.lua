@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -413,7 +413,8 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       vim.keymap.set('n', '<Space>f', builtin.find_files, { desc = '[F]iles' })
-      vim.keymap.set('n', '<Space>b', builtin.buffers, { desc = '[B]uffers' })
+      vim.keymap.set('n', '<Space>bc', 'Bc', { desc = 'Close buffer' })
+      vim.keymap.set('n', '<Space>bw', 'Wbc', { desc = 'Close buffer and write' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -788,7 +789,7 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          ['<CR>'] = cmp.mapping.confirm { select = true },
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
@@ -799,7 +800,7 @@ require('lazy').setup({
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
           --  completions whenever it has completion options available.
-          ['<C-Space>'] = cmp.mapping.complete {},
+          ['<C-x>'] = cmp.mapping.complete {},
 
           -- Think of <c-l> as moving to the right of your snippet expansion.
           --  So if you have a snippet that's like:
@@ -971,3 +972,37 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+-- Close the current buffer
+vim.api.nvim_create_user_command('Bc', 'bdelete', { desc = 'Close the current buffer' })
+
+-- Format the current buffer
+vim.api.nvim_create_user_command('Fmt', function()
+  vim.lsp.buf.format { async = true }
+end, { desc = 'Format the current buffer' })
+
+-- Write the current buffer and close it
+vim.api.nvim_create_user_command('Wbc', function()
+  vim.cmd 'write'
+  vim.cmd 'bdelete'
+end, { desc = 'Write the buffer and close it' })
+
+vim.keymap.set({ 'n', 'v' }, 'gl', '$', { desc = 'Go to the end of the line' })
+vim.keymap.set({ 'n', 'v' }, 'gb', '^', { desc = 'Go to the beginning of the line' })
+vim.keymap.set({ 'n', 'v' }, 'gB', '0', { desc = 'Go to the absolute beginning of the line' })
+vim.keymap.set({ 'n', 'v' }, 'ga', 'ggVG', { desc = 'Select all text in the file' })
+vim.keymap.set({ 'n', 'v' }, 'gh', 'V', { desc = 'Select the entire line' })
+
+vim.keymap.set({ 'n', 'v' }, 'a', 'i', { desc = 'Insert at the current cursor position (a acts like i)' })
+vim.keymap.set('v', 'R', 'c', { desc = 'Replace selected text in visual mode' })
+
+-- Open an empty buffer when `nvim .` is used
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        -- Check if Neovim was opened in a directory
+        if vim.fn.isdirectory(vim.fn.argv()[1] or "") == 1 then
+            vim.cmd("enew") -- Open an empty buffer
+            vim.cmd("cd " .. vim.fn.argv()[1]) -- Change to the specified directory
+        end
+    end,
+    desc = "Open an empty buffer instead of directory view",
+})
