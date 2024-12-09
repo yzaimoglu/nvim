@@ -412,9 +412,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
-      vim.keymap.set('n', '<Space>f', builtin.find_files, { desc = '[F]iles' })
-      vim.keymap.set('n', '<Space>bc', 'Bc', { desc = 'Close buffer' })
-      vim.keymap.set('n', '<Space>bw', 'Wbc', { desc = 'Close buffer and write' })
+      vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = '[F]iles' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -685,7 +683,7 @@ require('lazy').setup({
     cmd = { 'ConformInfo' },
     keys = {
       {
-        '<leader>f',
+        '<leader>-',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
@@ -996,13 +994,13 @@ vim.keymap.set({ 'n', 'v' }, 'a', 'i', { desc = 'Insert at the current cursor po
 vim.keymap.set('v', 'R', 'c', { desc = 'Replace selected text in visual mode' })
 
 -- Open an empty buffer when `nvim .` is used
-vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-        -- Check if Neovim was opened in a directory
-        if vim.fn.isdirectory(vim.fn.argv()[1] or "") == 1 then
-            vim.cmd("enew") -- Open an empty buffer
-            vim.cmd("cd " .. vim.fn.argv()[1]) -- Change to the specified directory
-        end
-    end,
-    desc = "Open an empty buffer instead of directory view",
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    -- Check if Neovim was opened in a directory
+    if vim.fn.isdirectory(vim.fn.argv()[1] or '') == 1 then
+      vim.cmd 'enew' -- Open an empty buffer
+      vim.cmd('cd ' .. vim.fn.argv()[1]) -- Change to the specified directory
+    end
+  end,
+  desc = 'Open an empty buffer instead of directory view',
 })
