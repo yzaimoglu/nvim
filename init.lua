@@ -989,6 +989,7 @@ vim.keymap.set({ 'n', 'v' }, 'gb', '^', { desc = 'Go to the beginning of the lin
 vim.keymap.set({ 'n', 'v' }, 'gB', '0', { desc = 'Go to the absolute beginning of the line' })
 vim.keymap.set({ 'n', 'v' }, 'ga', 'ggVG', { desc = 'Select all text in the file' })
 vim.keymap.set({ 'n', 'v' }, 'gh', 'V', { desc = 'Select the entire line' })
+vim.keymap.set({ 'n', 'v' }, 'x', 'V', { desc = 'Select the entire line' })
 
 vim.keymap.set({ 'n', 'v' }, 'a', 'i', { desc = 'Insert at the current cursor position (a acts like i)' })
 vim.keymap.set('v', 'R', 'c', { desc = 'Replace selected text in visual mode' })
