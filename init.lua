@@ -993,6 +993,9 @@ vim.keymap.set({ 'n', 'v' }, 'gh', 'V', { desc = 'Select the entire line' })
 vim.keymap.set({ 'n', 'v' }, 'a', 'i', { desc = 'Insert at the current cursor position (a acts like i)' })
 vim.keymap.set('v', 'R', 'c', { desc = 'Replace selected text in visual mode' })
 
+vim.keymap.set('n', '<leader>bc', '<Cmd>bdelete<CR>', { desc = 'Close current buffer' })
+vim.keymap.set('n', '<leader>bw', '<Cmd>Wbc<CR>', { desc = 'Write and close current buffer' })
+
 -- Open an empty buffer when `nvim .` is used
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
